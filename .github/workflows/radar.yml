@@ -1,0 +1,26 @@
+name: Competitive Radar Manual Research
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Capture public-page research
+        run: python monitor.py
+      - name: Upload reviewable report and snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: competitive-radar-pulse
+          path: |
+            PULSE.md
+            data/
+          if-no-files-found: warn
+          retention-days: 30
